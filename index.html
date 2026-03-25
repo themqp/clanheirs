@@ -1,1753 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ClanHeirs — Global Merchandise Importation</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --midnight: #080D1A;
-    --navy: #0D1528;
-    --navy-light: #13213A;
-    --gold: #C9A84C;
-    --gold-light: #E2C97E;
-    --gold-dim: rgba(201,168,76,0.15);
-    --ivory: #F5F0E6;
-    --ivory-dim: rgba(245,240,230,0.7);
-    --terracotta: #C4622D;
-    --cream: #EDE7D4;
-    --white: #ffffff;
-    --text-muted: rgba(245,240,230,0.45);
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--midnight);
-    color: var(--ivory);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE OVERLAY ─────────────────────────────── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.6;
-  }
-
-  /* ── NAV ───────────────────────────────────────── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 900;
-    padding: 28px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(to bottom, rgba(8,13,26,0.95) 0%, transparent 100%);
-    transition: background 0.4s;
-  }
-
-  nav.scrolled {
-    background: rgba(8,13,26,0.97);
-    border-bottom: 1px solid rgba(201,168,76,0.12);
-    padding: 18px 60px;
-  }
-
-  .logo {
-    display: flex;
-    flex-direction: column;
-    line-height: 1;
-  }
-
-  .logo-main {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
-
-  .logo-sub {
-    font-size: 9px;
-    letter-spacing: 0.35em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-top: 3px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 42px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    text-decoration: none;
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ivory-dim);
-    transition: color 0.25s;
-  }
-
-  .nav-links a:hover { color: var(--gold); }
-
-  .nav-cta {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--midnight);
-    background: var(--gold);
-    padding: 11px 26px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 500;
-    transition: background 0.25s, transform 0.2s;
-  }
-
-  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
-
-  /* ── HERO ──────────────────────────────────────── */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    padding: 0 60px;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 70% at 80% 50%, rgba(201,168,76,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(196,98,45,0.05) 0%, transparent 60%),
-      radial-gradient(ellipse 80% 60% at 50% 20%, rgba(13,21,40,0.6) 0%, transparent 70%),
-      var(--midnight);
-  }
-
-  /* Adinkra-inspired geometric pattern */
-  .hero-pattern {
-    position: absolute;
-    right: -60px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 520px;
-    height: 520px;
-    opacity: 0.06;
-    animation: slowSpin 80s linear infinite;
-  }
-
-  @keyframes slowSpin { to { transform: translateY(-50%) rotate(360deg); } }
-
-  .hero-globe {
-    position: absolute;
-    right: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 500px;
-    height: 500px;
-    filter: drop-shadow(0 0 40px rgba(201,168,76,0.08));
-  }
-
-  .globe-svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 680px;
-  }
-
-  .hero-eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards 0.3s;
-  }
-
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(56px, 6vw, 90px);
-    font-weight: 300;
-    line-height: 1.0;
-    letter-spacing: -0.01em;
-    color: var(--ivory);
-    margin-bottom: 36px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease forwards 0.5s;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .hero-desc {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--ivory-dim);
-    max-width: 480px;
-    margin-bottom: 52px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease forwards 0.7s;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    opacity: 0;
-    animation: fadeUp 0.9s ease forwards 0.9s;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    color: var(--midnight);
-    padding: 16px 38px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.25); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--ivory-dim);
-    padding: 16px 38px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    border: 1px solid rgba(245,240,230,0.18);
-    cursor: pointer;
-    transition: all 0.25s;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
-
-  .hero-scroll {
-    position: absolute;
-    bottom: 48px;
-    left: 60px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease forwards 1.2s;
-  }
-
-  .scroll-line {
-    width: 48px;
-    height: 1px;
-    background: var(--gold);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .scroll-line::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--ivory);
-    animation: slideRight 2s ease-in-out infinite 1.5s;
-  }
-
-  @keyframes slideRight { to { left: 200%; } }
-
-  .scroll-text {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── STATS BAR ─────────────────────────────────── */
-  .stats-bar {
-    background: var(--navy);
-    border-top: 1px solid rgba(201,168,76,0.12);
-    border-bottom: 1px solid rgba(201,168,76,0.12);
-    padding: 40px 60px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-  }
-
-  .stat-item {
-    text-align: center;
-    padding: 0 30px;
-    position: relative;
-  }
-
-  .stat-item:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 40px;
-    width: 1px;
-    background: rgba(201,168,76,0.15);
-  }
-
-  .stat-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    font-weight: 300;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .stat-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  /* ── SECTIONS COMMON ───────────────────────────── */
-  section {
-    padding: 120px 60px;
-    position: relative;
-  }
-
-  .section-eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .section-eyebrow::before {
-    content: '';
-    display: block;
-    width: 30px;
-    height: 1px;
-    background: var(--gold);
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 4vw, 58px);
-    font-weight: 300;
-    line-height: 1.1;
-    margin-bottom: 24px;
-    color: var(--ivory);
-  }
-
-  .section-title em { font-style: italic; color: var(--gold); }
-
-  /* ── ABOUT ─────────────────────────────────────── */
-  #about {
-    background: var(--navy);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-
-  .about-left { }
-
-  .about-text {
-    font-size: 16px;
-    line-height: 1.9;
-    color: var(--ivory-dim);
-    margin-bottom: 20px;
-  }
-
-  .about-text strong { color: var(--ivory); font-weight: 500; }
-
-  .about-right {
-    position: relative;
-  }
-
-  .about-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(201,168,76,0.12);
-    padding: 40px;
-    margin-bottom: 16px;
-    position: relative;
-    transition: border-color 0.3s, background 0.3s;
-  }
-
-  .about-card:hover {
-    border-color: rgba(201,168,76,0.3);
-    background: rgba(201,168,76,0.04);
-  }
-
-  .about-card-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    margin-bottom: 10px;
-  }
-
-  .about-card-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--ivory);
-    margin-bottom: 8px;
-  }
-
-  .about-card-desc {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--text-muted);
-  }
-
-  /* ── MARKETS ───────────────────────────────────── */
-  #markets {
-    background: var(--midnight);
-  }
-
-  .markets-header {
-    text-align: center;
-    margin-bottom: 80px;
-  }
-
-  .markets-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-  }
-
-  .market-card {
-    background: var(--navy);
-    padding: 56px 44px;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.4s ease;
-    cursor: default;
-  }
-
-  .market-card:hover { transform: translateY(-6px); z-index: 2; }
-
-  .market-card::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--gold);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-    transform-origin: left;
-  }
-
-  .market-card:hover::before { transform: scaleX(1); }
-
-  .market-card.africa::before { background: var(--terracotta); }
-  .market-card.northam::before { background: var(--gold-light); }
-
-  .market-flag {
-    margin-bottom: 24px;
-    display: block;
-    width: 48px;
-    height: 32px;
-  }
-
-  .market-flag svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .market-region {
-    font-size: 9px;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-  }
-
-  .market-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 600;
-    color: var(--ivory);
-    margin-bottom: 20px;
-    line-height: 1.15;
-  }
-
-  .market-desc {
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--text-muted);
-    margin-bottom: 32px;
-  }
-
-  .market-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .market-tag {
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border: 1px solid rgba(201,168,76,0.2);
-    color: var(--gold);
-  }
-
-  .market-card.africa .market-tag {
-    border-color: rgba(196,98,45,0.25);
-    color: var(--terracotta);
-  }
-
-  .market-card.northam .market-tag {
-    border-color: rgba(226,201,126,0.2);
-    color: var(--gold-light);
-  }
-
-  /* ── SERVICES ──────────────────────────────────── */
-  #services {
-    background: var(--navy-light);
-  }
-
-  .services-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  .services-left {
-    position: sticky;
-    top: 120px;
-  }
-
-  .services-left .section-title { font-size: clamp(32px, 3.5vw, 50px); }
-
-  .services-left p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--ivory-dim);
-    margin-top: 24px;
-  }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-  }
-
-  .service-item {
-    background: rgba(13,21,40,0.6);
-    border: 1px solid rgba(201,168,76,0.08);
-    padding: 40px 36px;
-    transition: border-color 0.3s, background 0.3s;
-  }
-
-  .service-item:hover {
-    border-color: rgba(201,168,76,0.22);
-    background: rgba(13,21,40,0.9);
-  }
-
-  .service-icon {
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(201,168,76,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 22px;
-  }
-
-  .service-icon svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--gold);
-    fill: none;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .service-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--ivory);
-    margin-bottom: 12px;
-  }
-
-  .service-desc {
-    font-size: 13.5px;
-    line-height: 1.75;
-    color: var(--text-muted);
-  }
-
-  /* ── WHY US ────────────────────────────────────── */
-  #why {
-    background: var(--midnight);
-    text-align: center;
-    padding: 120px 60px;
-  }
-
-  #why .section-eyebrow { justify-content: center; }
-  #why .section-eyebrow::before { display: none; }
-
-  #why .section-title { max-width: 600px; margin: 0 auto 70px; }
-
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .why-item {
-    text-align: center;
-  }
-
-  .why-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 64px;
-    font-weight: 300;
-    color: var(--gold-dim);
-    line-height: 1;
-    margin-bottom: -10px;
-    background: linear-gradient(135deg, var(--gold) 0%, rgba(201,168,76,0.2) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .why-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--ivory);
-    margin-bottom: 12px;
-  }
-
-  .why-desc {
-    font-size: 13.5px;
-    line-height: 1.75;
-    color: var(--text-muted);
-  }
-
-  /* ── PARTNERS / ROUTE ──────────────────────────── */
-  #route {
-    background: var(--navy);
-    padding: 100px 60px;
-    overflow: hidden;
-  }
-
-  .route-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-    margin-bottom: 80px;
-  }
-
-  .route-header p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--ivory-dim);
-  }
-
-  .route-visual {
-    position: relative;
-    height: 120px;
-    display: flex;
-    align-items: center;
-  }
-
-  .route-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .route-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 16px rgba(201,168,76,0.5);
-    flex-shrink: 0;
-  }
-
-  .route-label {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    white-space: nowrap;
-  }
-
-  .route-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, rgba(201,168,76,0.5), rgba(201,168,76,0.15));
-    position: relative;
-    overflow: visible;
-    margin-bottom: 24px;
-  }
-
-  .route-line::after {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0;
-    width: 40%;
-    height: 3px;
-    background: var(--gold);
-    animation: tradeRoute 3s ease-in-out infinite;
-    border-radius: 2px;
-  }
-
-  @keyframes tradeRoute {
-    0% { left: -40%; opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { left: 110%; opacity: 0; }
-  }
-
-  .route-nodes {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 0;
-  }
-
-  .categories-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1px;
-    background: rgba(201,168,76,0.08);
-  }
-
-  .cat-item {
-    background: var(--navy);
-    padding: 28px 20px;
-    text-align: center;
-    transition: background 0.3s;
-  }
-
-  .cat-item:hover { background: rgba(201,168,76,0.06); }
-
-  .cat-icon { width: 28px; height: 28px; margin: 0 auto 12px; display: block; }
-  .cat-icon svg { width: 28px; height: 28px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0.7; }
-  .cat-item:hover .cat-icon svg { opacity: 1; }
-
-  .cat-name {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  /* ── CONTACT ───────────────────────────────────── */
-  #contact {
-    background: var(--midnight);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    min-height: 600px;
-    padding: 0;
-  }
-
-  .contact-left {
-    padding: 100px 60px;
-    background: var(--navy);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .contact-right {
-    padding: 100px 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: rgba(201,168,76,0.04);
-    border-left: 1px solid rgba(201,168,76,0.1);
-  }
-
-  .contact-left .section-title { font-size: clamp(32px, 3.5vw, 52px); }
-
-  .contact-left p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--ivory-dim);
-    margin-top: 20px;
-    margin-bottom: 40px;
-  }
-
-  .contact-info { display: flex; flex-direction: column; gap: 20px; }
-
-  .contact-info-item {
-    display: flex;
-    gap: 18px;
-    align-items: flex-start;
-  }
-
-  .ci-icon {
-    font-size: 18px;
-    margin-top: 2px;
-    flex-shrink: 0;
-  }
-
-  .ci-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-
-  .ci-value {
-    font-size: 14px;
-    color: var(--ivory-dim);
-    line-height: 1.5;
-  }
-
-  /* Form */
-  .contact-form { display: flex; flex-direction: column; gap: 20px; }
-
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-
-  .form-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  .form-input, .form-select, .form-textarea {
-    background: rgba(13,21,40,0.6);
-    border: 1px solid rgba(201,168,76,0.15);
-    color: var(--ivory);
-    font-family: 'Outfit', sans-serif;
-    font-size: 14px;
-    padding: 14px 18px;
-    transition: border-color 0.25s;
-    outline: none;
-    width: 100%;
-  }
-
-  .form-input:focus, .form-select:focus, .form-textarea:focus {
-    border-color: rgba(201,168,76,0.45);
-  }
-
-  .form-select option { background: var(--navy); }
-
-  .form-textarea { resize: vertical; min-height: 100px; }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  .form-submit {
-    background: var(--gold);
-    color: var(--midnight);
-    border: none;
-    padding: 16px 32px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    align-self: flex-start;
-  }
-
-  .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
-
-  /* ── FOOTER ────────────────────────────────────── */
-  footer {
-    background: var(--navy);
-    border-top: 1px solid rgba(201,168,76,0.1);
-    padding: 60px 60px 40px;
-  }
-
-  .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 60px;
-    margin-bottom: 60px;
-  }
-
-  .footer-brand p {
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--text-muted);
-    margin-top: 20px;
-    max-width: 300px;
-  }
-
-  .footer-col-title {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-
-  .footer-links a {
-    font-size: 14px;
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .footer-links a:hover { color: var(--ivory); }
-
-  .footer-bottom {
-    border-top: 1px solid rgba(201,168,76,0.08);
-    padding-top: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .footer-copy {
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
-  }
-
-  .footer-tagline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    font-style: italic;
-    color: var(--gold);
-    opacity: 0.6;
-  }
-
-  /* ── SCROLL ANIMATION ──────────────────────────── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
-
-  /* ── RESPONSIVE ────────────────────────────────── */
-  @media (max-width: 1024px) {
-    nav { padding: 24px 30px; }
-    .nav-links { gap: 24px; }
-    section { padding: 80px 30px; }
-    #hero { padding: 0 30px; }
-    .hero-globe { display: none; }
-    .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 40px 30px; }
-    .stat-item:nth-child(2)::after { display: none; }
-    #about { grid-template-columns: 1fr; gap: 50px; }
-    .markets-grid { grid-template-columns: 1fr; }
-    .services-layout { grid-template-columns: 1fr; }
-    .services-left { position: relative; top: auto; }
-    .why-grid { grid-template-columns: repeat(2, 1fr); }
-    #contact { grid-template-columns: 1fr; }
-    .contact-left, .contact-right { padding: 60px 30px; }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
-    .categories-grid { grid-template-columns: repeat(3, 1fr); }
-    .route-header { grid-template-columns: 1fr; gap: 40px; }
-    #route { padding: 80px 30px; }
-    footer { padding: 50px 30px 30px; }
-    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-    nav.scrolled { padding: 16px 30px; }
-  }
-
-  @media (max-width: 640px) {
-    .nav-links { display: none; }
-    .hero-title { font-size: 44px; }
-    .hero-actions { flex-direction: column; align-items: flex-start; }
-    .stats-bar { grid-template-columns: 1fr 1fr; }
-    .services-grid { grid-template-columns: 1fr; }
-    .why-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr; }
-    .categories-grid { grid-template-columns: repeat(2, 1fr); }
-    .nav-cta { display: none; }
-  }
+:root {
+  --cream:  #F7F4ED;
+  --cream2: #EEE9DE;
+  --border: #E0D9CC;
+  --dark:   #1A1A1A;
+  --mid:    #6B6560;
+  --light:  #9E9890;
+  --white:  #FFFFFF;
+  --green:  #4A6830;
+  --gold:   #A07C3A;
+  --red:    #C44A2A;
+  --fh: 'Barlow Condensed', sans-serif;
+  --fb: 'Barlow', sans-serif;
+  --nav-h: 64px;
+  --bar-h: 38px;
+  --gutter: 48px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--fb);background:var(--cream);color:var(--dark);font-weight:300;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+
+/* ── BAR ── */
+.bar{height:var(--bar-h);background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#fff;position:relative;z-index:200;}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;height:var(--nav-h);background:var(--cream);border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 var(--gutter);transition:box-shadow .3s;}
+.nav.scrolled{box-shadow:0 2px 16px rgba(0,0,0,.07);}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{font-family:var(--fh);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;transition:opacity .2s;}
+.nav-links a:hover{opacity:.5;}
+.nav-logo{text-align:center;}
+.logo-word{font-family:var(--fh);font-size:22px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1;}
+.logo-sub{font-size:8px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--mid);margin-top:3px;}
+.nav-right{display:flex;justify-content:flex-end;}
+.nav-cta{font-family:var(--fh);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:var(--dark);color:#fff;padding:9px 22px;border:none;cursor:pointer;transition:background .2s;}
+.nav-cta:hover{background:var(--green);}
+
+/* ── HERO ── */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - var(--nav-h) - var(--bar-h));border-bottom:1px solid var(--border);}
+.hero-left{padding:80px var(--gutter);display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);}
+.hero-eyebrow{font-family:var(--fh);font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--green);margin-bottom:28px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--green);}
+.hero-h1{font-family:var(--fh);font-size:clamp(52px,5.5vw,82px);font-weight:700;line-height:.96;letter-spacing:.01em;text-transform:uppercase;margin-bottom:32px;}
+.hero-h1 em{font-style:normal;color:var(--gold);}
+.hero-desc{font-size:15px;line-height:1.8;color:var(--mid);max-width:440px;margin-bottom:48px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.btn{font-family:var(--fh);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 32px;border:none;cursor:pointer;display:inline-block;transition:all .2s;}
+.btn-dark{background:var(--dark);color:#fff;}
+.btn-dark:hover{background:var(--green);}
+.btn-outline{background:transparent;color:var(--dark);border:1.5px solid var(--dark);}
+.btn-outline:hover{background:var(--dark);color:#fff;}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:64px;border-top:1px solid var(--border);padding-top:32px;}
+.hero-stat+.hero-stat{border-left:1px solid var(--border);padding-left:24px;}
+.stat-n{font-family:var(--fh);font-size:40px;font-weight:700;line-height:1;}
+.stat-l{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--light);margin-top:4px;}
+.hero-right{position:relative;background:var(--cream2);display:flex;align-items:center;justify-content:center;min-height:560px;overflow:hidden;}
+.globe-wrap{width:460px;height:460px;}
+.globe-wrap svg{width:100%;height:100%;}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-family:var(--fh);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--light);display:flex;flex-direction:column;align-items:center;gap:10px;}
+.scroll-arr{width:1px;height:32px;background:var(--border);position:relative;overflow:hidden;}
+.scroll-arr::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--dark);animation:sa 1.6s ease-in-out infinite;}
+@keyframes sa{to{top:200%;}}
+
+/* ── USP BAR ── */
+.usp-bar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);}
+.usp-item{padding:26px 28px;display:flex;align-items:center;gap:16px;border-right:1px solid var(--border);}
+.usp-item:last-child{border-right:none;}
+.usp-icon svg{width:26px;height:26px;stroke:var(--dark);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.usp-tt{font-family:var(--fh);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.usp-ts{font-size:12px;color:var(--mid);margin-top:2px;line-height:1.4;}
+
+/* ── SECTION COMMONS ── */
+.section{border-bottom:1px solid var(--border);}
+.si{max-width:1600px;margin:0 auto;padding:0 var(--gutter);}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;padding:56px 0 40px;border-bottom:1px solid var(--border);}
+.sh-ey{font-family:var(--fh);font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--mid);margin-bottom:10px;}
+.sh-ti{font-family:var(--fh);font-size:clamp(28px,3vw,44px);font-weight:700;letter-spacing:.02em;text-transform:uppercase;line-height:1;}
+.sh-ti em{font-style:normal;color:var(--gold);}
+.sh-link{font-family:var(--fh);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-bottom:1.5px solid var(--dark);padding-bottom:2px;transition:color .2s,border-color .2s;}
+.sh-link:hover{color:var(--green);border-color:var(--green);}
+
+/* ── MARKETS ── */
+.markets-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.mc{padding:48px 40px 56px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .25s;}
+.mc:last-child{border-right:none;}
+.mc:hover{background:var(--cream2);}
+.mf{display:flex;gap:12px;margin-bottom:32px;}
+.fi-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:6px;}
+.fi-wrap svg{border-radius:2px;box-shadow:0 1px 5px rgba(0,0,0,.15);}
+.fn{font-family:var(--fh);font-size:8px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--light);}
+.mr{font-family:var(--fh);font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+.mn{font-family:var(--fh);font-size:28px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;line-height:1;margin-bottom:20px;}
+.md{font-size:14px;line-height:1.75;color:var(--mid);margin-bottom:32px;}
+.mts{display:flex;flex-wrap:wrap;gap:6px;}
+.mt{font-family:var(--fh);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border:1px solid var(--border);color:var(--mid);background:var(--cream);}
+
+/* ── ABOUT ── */
+.ab-split{display:grid;grid-template-columns:1fr 1fr;}
+.ab-l{padding:72px var(--gutter) 72px 0;border-right:1px solid var(--border);}
+.ab-r{padding:72px 0 72px var(--gutter);}
+.ab-p{font-size:15px;line-height:1.85;color:var(--mid);margin-bottom:20px;}
+.ab-p strong{color:var(--dark);font-weight:500;}
+.pillars{display:flex;flex-direction:column;}
+.pillar{padding:28px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:48px 1fr;gap:20px;align-items:start;}
+.pillar:first-child{padding-top:0;}
+.pillar:last-child{border-bottom:none;}
+.pn{font-family:var(--fh);font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--border);padding-top:3px;}
+.pt{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.pd{font-size:13px;line-height:1.7;color:var(--mid);}
+
+/* ── SERVICES ── */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.svc{padding:48px 36px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .25s;}
+.svc:nth-child(3n){border-right:none;}
+.svc:nth-child(4),.svc:nth-child(5),.svc:nth-child(6){border-bottom:none;}
+.svc:hover{background:var(--cream2);}
+.si2{width:42px;height:42px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:24px;}
+.si2 svg{width:18px;height:18px;stroke:var(--dark);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.sn{font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+.sd{font-size:13px;line-height:1.75;color:var(--mid);}
+
+/* ── ROUTE ── */
+.route-sec{padding:72px 0;border-bottom:1px solid var(--border);}
+.rv{display:flex;align-items:center;margin:48px var(--gutter);position:relative;}
+.rn{display:flex;flex-direction:column;align-items:center;gap:10px;z-index:2;}
+.rdot{width:14px;height:14px;border-radius:50%;border:2px solid var(--dark);background:var(--cream);position:relative;}
+.rdot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--dark);}
+.rdot.gd{border-color:var(--gold);}
+.rdot.gd::after{background:var(--gold);}
+.rdot.rd{border-color:var(--red);}
+.rdot.rd::after{background:var(--red);}
+.rl{font-family:var(--fh);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);}
+.rline{flex:1;height:1px;background:var(--border);position:relative;overflow:hidden;margin-bottom:22px;}
+.rline::after{content:'';position:absolute;top:-.5px;left:-40%;width:40%;height:2px;background:var(--dark);animation:rf 3s ease-in-out infinite;}
+.rline.g::after{background:var(--gold);animation-delay:.8s;}
+.rline.r::after{background:var(--red);animation-delay:.4s;}
+@keyframes rf{to{left:110%;}}
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);}
+.ci2{padding:32px 20px;border-right:1px solid var(--border);border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:14px;transition:background .25s;}
+.ci2:last-child{border-right:none;}
+.ci2:hover{background:var(--cream2);}
+.ci2 svg{width:24px;height:24px;stroke:var(--dark);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.6;}
+.ci2:hover svg{opacity:1;}
+.cn{font-family:var(--fh);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);text-align:center;}
+
+/* ── WHY ── */
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.wi{padding:52px 36px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.wi:last-child{border-right:none;}
+.wnum{font-family:var(--fh);font-size:52px;font-weight:700;color:var(--border);line-height:1;margin-bottom:16px;}
+.wt{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;}
+.wd{font-size:13px;line-height:1.75;color:var(--mid);}
+
+/* ── CONTACT ── */
+.ctc{display:grid;grid-template-columns:1fr 1fr;}
+.cl{padding:72px var(--gutter) 72px 0;border-right:1px solid var(--border);}
+.cr{padding:72px 0 72px var(--gutter);}
+.cinfos{display:flex;flex-direction:column;gap:28px;margin-top:40px;}
+.cii{display:flex;gap:16px;align-items:flex-start;}
+.cii-ic{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cii-ic svg{width:15px;height:15px;stroke:var(--dark);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.cil{font-family:var(--fh);font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--light);margin-bottom:4px;}
+.civ{font-size:14px;color:var(--mid);line-height:1.5;}
+.form{display:flex;flex-direction:column;gap:18px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fg{display:flex;flex-direction:column;gap:7px;}
+.fl{font-family:var(--fh);font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);}
+.fi,.fs,.ft{background:var(--white);border:1px solid var(--border);color:var(--dark);font-family:var(--fb);font-size:14px;font-weight:300;padding:13px 16px;outline:none;transition:border-color .2s;width:100%;}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--dark);}
+.ft{resize:vertical;min-height:100px;}
+.fsub{font-family:var(--fh);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--dark);color:#fff;border:none;padding:15px 36px;cursor:pointer;align-self:flex-start;transition:background .2s;}
+.fsub:hover{background:var(--green);}
+
+/* ── FOOTER ── */
+.f-motif{background:var(--cream2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px var(--gutter);display:flex;flex-direction:column;align-items:center;gap:16px;}
+.f-big{font-family:var(--fh);font-size:72px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--border);line-height:1;user-select:none;}
+.f-tag{font-family:var(--fh);font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--light);}
+.f-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);}
+.fc{padding:52px 40px;border-right:1px solid var(--border);}
+.fc:first-child{padding-left:var(--gutter);}
+.fc:last-child{border-right:none;}
+.fa p{font-size:13px;line-height:1.8;color:var(--mid);margin-top:16px;max-width:280px;}
+.fct{font-family:var(--fh);font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:20px;}
+.flinks{display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-size:13px;color:var(--mid);transition:color .2s;}
+.flinks a:hover{color:var(--dark);}
+.f-bot{display:flex;justify-content:space-between;align-items:center;padding:20px var(--gutter);}
+.f-copy{font-size:12px;color:var(--light);}
+.f-mkt{font-family:var(--fh);font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--light);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+.d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  :root{--gutter:28px;}
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-right{border-top:1px solid var(--border);min-height:380px;}
+  .hero-left{padding:56px var(--gutter);}
+  .usp-bar{grid-template-columns:repeat(2,1fr);}
+  .usp-item:nth-child(2){border-right:none;}
+  .usp-item:nth-child(3),.usp-item:nth-child(4){border-top:1px solid var(--border);}
+  .usp-item:nth-child(4){border-right:none;}
+  .markets-grid{grid-template-columns:1fr;}
+  .mc{border-right:none;}
+  .ab-split{grid-template-columns:1fr;}
+  .ab-l{padding:48px 0;border-right:none;border-bottom:1px solid var(--border);}
+  .ab-r{padding:48px 0;}
+  .svc-grid{grid-template-columns:repeat(2,1fr);}
+  .svc:nth-child(2n){border-right:none;}
+  .svc:nth-child(3){border-right:1px solid var(--border);}
+  .svc:nth-child(4){border-bottom:1px solid var(--border);}
+  .svc:nth-child(5){border-bottom:1px solid var(--border);border-right:none;}
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
+  .ci2:nth-child(3n){border-right:none;}
+  .ci2:nth-child(4),.ci2:nth-child(5),.ci2:nth-child(6){border-top:1px solid var(--border);}
+  .why-grid{grid-template-columns:repeat(2,1fr);}
+  .wi:nth-child(2n){border-right:none;}
+  .wi:nth-child(3),.wi:nth-child(4){border-bottom:none;}
+  .ctc{grid-template-columns:1fr;}
+  .cl{padding:48px 0;border-right:none;border-bottom:1px solid var(--border);}
+  .cr{padding:48px 0;}
+  .f-main{grid-template-columns:1fr 1fr;}
+  .fc:nth-child(2n){border-right:none;}
+  .fc:nth-child(3),.fc:nth-child(4){border-top:1px solid var(--border);}
+  .globe-wrap{width:300px;height:300px;}
+}
+@media(max-width:640px){
+  .nav-links,.nav-cta{display:none;}
+  .nav{grid-template-columns:1fr;justify-items:center;}
+  .hero-h1{font-size:40px;}
+  .hero-stats{grid-template-columns:1fr;}
+  .hero-stat+.hero-stat{border-left:none;border-top:1px solid var(--border);padding-left:0;padding-top:16px;margin-top:16px;}
+  .usp-bar{grid-template-columns:1fr;}
+  .usp-item{border-right:none;border-top:1px solid var(--border);}
+  .usp-item:first-child{border-top:none;}
+  .svc-grid{grid-template-columns:1fr;}
+  .svc{border-right:none;border-bottom:1px solid var(--border);}
+  .svc:nth-child(3){border-right:none;}
+  .svc:last-child{border-bottom:none;}
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .ci2:nth-child(3n){border-right:1px solid var(--border);}
+  .ci2:nth-child(2n){border-right:none;}
+  .why-grid{grid-template-columns:1fr;}
+  .wi{border-right:none;}
+  .f-main{grid-template-columns:1fr;}
+  .fc{border-right:none;border-bottom:1px solid var(--border);}
+  .fc:last-child{border-bottom:none;}
+  .frow{grid-template-columns:1fr;}
+  .f-bot{flex-direction:column;gap:8px;text-align:center;}
+  .f-big{font-size:40px;}
+}
 </style>
 </head>
 <body>
 
+<!-- BAR -->
+<div class="bar">Global Merchandise Importation · China · Ghana · Nigeria · USA · Canada</div>
+
 <!-- NAV -->
-<nav id="navbar">
-  <div class="logo">
-    <span class="logo-main">ClanHeirs</span>
-    <span class="logo-sub">Global Merchandise Group</span>
-  </div>
+<nav class="nav" id="navbar">
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#markets">Markets</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#route">Products</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#products">Products</a></li>
   </ul>
-  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
+  <div class="nav-logo">
+    <div class="logo-word">ClanHeirs</div>
+    <div class="logo-sub">Global Merchandise Group</div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Trade Inquiry</button>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-bg"></div>
-
-  <!-- REAL SVG GLOBE — equirectangular projection, center lon=15°E -->
-  <!-- Mapping: x = 250 + (lon-15)/180*215 · y = 250 - lat/90*215 -->
-  <!-- Key cities: Beijing(371,155) · Accra(232,236) · Lagos(236,234) · NewYork(144,153) · Toronto(137,146) -->
-  <div class="hero-globe">
-    <svg class="globe-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <clipPath id="gc"><circle cx="250" cy="250" r="218"/></clipPath>
-        <radialGradient id="og" cx="38%" cy="32%" r="65%">
-          <stop offset="0%" stop-color="#1b3d70"/>
-          <stop offset="100%" stop-color="#040b1c"/>
-        </radialGradient>
-        <radialGradient id="sg" cx="28%" cy="24%" r="52%">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.10)"/>
-          <stop offset="70%" stop-color="rgba(255,255,255,0)"/>
-        </radialGradient>
-        <filter id="cityglow" x="-100%" y="-100%" width="300%" height="300%">
-          <feGaussianBlur stdDeviation="3.5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="arcglow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      <!-- Ocean base -->
-      <circle cx="250" cy="250" r="218" fill="url(#og)"/>
-
-      <g clip-path="url(#gc)">
-
-        <!-- ── LATITUDE GRID ── -->
-        <line x1="32" y1="250" x2="468" y2="250" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
-        <line x1="32" y1="178" x2="468" y2="178" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="32" y1="322" x2="468" y2="322" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="32" y1="107" x2="468" y2="107" stroke="rgba(255,255,255,0.03)" stroke-width="0.4"/>
-        <line x1="32" y1="393" x2="468" y2="393" stroke="rgba(255,255,255,0.03)" stroke-width="0.4"/>
-
-        <!-- ── LONGITUDE GRID ── -->
-        <line x1="250" y1="32" x2="250" y2="468" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
-        <line x1="131" y1="32" x2="131" y2="468" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="369" y1="32" x2="369" y2="468" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="72"  y1="32" x2="72"  y2="468" stroke="rgba(255,255,255,0.03)" stroke-width="0.4"/>
-        <line x1="428" y1="32" x2="428" y2="468" stroke="rgba(255,255,255,0.03)" stroke-width="0.4"/>
-
-        <!-- ── NORTH AMERICA ── -->
-        <path d="
-          M 78,118 C 80,100 90,86 102,78
-          L 118,72 L 132,70 L 140,74
-          L 140,84 L 136,94 L 130,104
-          L 128,116 L 124,128
-          L 122,140 L 124,154
-          L 128,168 L 130,183
-          L 126,198 L 120,212
-          L 116,225 L 112,232
-          L 106,228 L 100,220
-          L 94,225 L 89,219
-          L 87,208 L 90,198
-          L 87,187 L 80,176
-          L 73,162 L 70,148
-          L 70,134 L 74,122 Z
-        " fill="rgba(55,88,130,0.6)" stroke="rgba(120,165,230,0.22)" stroke-width="0.9"/>
-
-        <!-- Greenland -->
-        <path d="M 100,72 L 118,68 L 130,72 L 122,82 L 108,86 L 98,80 Z"
-              fill="rgba(55,88,130,0.45)" stroke="rgba(120,165,230,0.18)" stroke-width="0.7"/>
-
-        <!-- ── SOUTH AMERICA ── -->
-        <path d="
-          M 148,252 L 168,248 L 186,254
-          L 198,270 L 204,292 L 207,316
-          L 204,340 L 197,360
-          L 183,378 L 168,390
-          L 152,394 L 138,383
-          L 128,362 L 122,340
-          L 120,316 L 124,296
-          L 130,276 L 138,262 Z
-        " fill="rgba(55,88,130,0.6)" stroke="rgba(120,165,230,0.22)" stroke-width="0.9"/>
-
-        <!-- ── EUROPE (simplified) ── -->
-        <!-- Iberian/mainland body -->
-        <path d="
-          M 220,165 L 235,160 L 248,156
-          L 260,150 L 268,143 L 272,135
-          L 268,127 L 260,122
-          L 253,130 L 248,138
-          L 243,145 L 238,152
-          L 230,158 Z
-        " fill="rgba(55,88,130,0.58)" stroke="rgba(120,165,230,0.20)" stroke-width="0.8"/>
-        <!-- SE Europe extension (Italy/Greece/Turkey) -->
-        <path d="
-          M 248,156 L 262,152 L 275,155
-          L 282,162 L 278,170
-          L 268,174 L 258,170
-          L 250,165 Z
-        " fill="rgba(55,88,130,0.52)" stroke="rgba(120,165,230,0.18)" stroke-width="0.7"/>
-        <!-- Scandinavia -->
-        <path d="
-          M 252,126 L 260,118 L 268,114
-          L 272,122 L 268,132
-          L 258,136 L 250,132 Z
-        " fill="rgba(55,88,130,0.48)" stroke="rgba(120,165,230,0.16)" stroke-width="0.7"/>
-
-        <!-- ── AFRICA ── -->
-        <!-- Full outline going clockwise from NW -->
-        <path d="
-          M 224,165 L 246,163 L 262,162
-          L 278,165 L 295,172
-          L 310,183 L 318,198
-          L 322,214 L 320,232
-          L 315,248 L 312,264
-          L 315,282 L 313,305
-          L 307,325 L 296,340
-          L 280,348 L 263,344
-          L 248,332 L 238,315
-          L 228,294 L 220,270
-          L 215,250 L 216,233
-          L 218,218 L 215,202
-          L 212,188 L 214,175 Z
-        " fill="rgba(62,105,58,0.60)" stroke="rgba(130,190,110,0.22)" stroke-width="0.9"/>
-
-        <!-- Madagascar -->
-        <path d="M 318,290 L 324,280 L 330,290 L 328,308 L 320,310 Z"
-              fill="rgba(62,105,58,0.50)" stroke="rgba(130,190,110,0.18)" stroke-width="0.7"/>
-
-        <!-- ── EURASIA (Middle East + Asia body) ── -->
-        <path d="
-          M 278,165 L 296,162 L 314,158
-          L 335,152 L 356,148
-          L 374,148 L 390,153
-          L 406,160 L 418,168
-          L 428,180 L 432,196
-          L 428,210 L 422,224
-          L 414,238 L 403,250
-          L 392,256 L 378,258
-          L 364,254 L 350,250
-          L 338,256 L 326,258
-          L 316,250 L 312,238
-          L 310,224 L 314,210
-          L 318,196 L 316,182
-          L 308,172 L 295,167
-          L 282,164 Z
-        " fill="rgba(55,88,130,0.60)" stroke="rgba(120,165,230,0.22)" stroke-width="0.9"/>
-
-        <!-- Indian subcontinent -->
-        <path d="
-          M 340,210 L 354,206 L 362,216
-          L 360,232 L 352,244
-          L 340,252 L 330,248
-          L 326,236 L 328,222 Z
-        " fill="rgba(55,88,130,0.58)" stroke="rgba(120,165,230,0.18)" stroke-width="0.8"/>
-
-        <!-- SE Asia / Malay peninsula -->
-        <path d="
-          M 378,218 L 386,226 L 384,242
-          L 375,252 L 365,248
-          L 360,238 L 364,226 Z
-        " fill="rgba(55,88,130,0.52)" stroke="rgba(120,165,230,0.16)" stroke-width="0.7"/>
-
-        <!-- ── RUSSIA / N ASIA (Siberia) ── -->
-        <path d="
-          M 250,142 L 270,132 L 298,122
-          L 330,112 L 362,106
-          L 396,102 L 428,106
-          L 450,116 L 460,130
-          L 448,142 L 428,150
-          L 406,152 L 383,148
-          L 360,146 L 338,148
-          L 316,152 L 298,156
-          L 280,162 L 264,165
-          L 252,162 L 248,150 Z
-        " fill="rgba(55,88,130,0.48)" stroke="rgba(120,165,230,0.16)" stroke-width="0.8"/>
-
-        <!-- Japan (island) -->
-        <path d="M 414,158 L 420,152 L 426,158 L 422,166 L 414,164 Z"
-              fill="rgba(55,88,130,0.52)" stroke="rgba(120,165,230,0.18)" stroke-width="0.7"/>
-
-        <!-- ── AUSTRALIA ── -->
-        <path d="
-          M 388,308 L 408,302 L 430,304
-          L 444,314 L 448,330
-          L 443,346 L 432,356
-          L 415,360 L 398,357
-          L 383,348 L 374,334
-          L 375,318 Z
-        " fill="rgba(55,88,130,0.55)" stroke="rgba(120,165,230,0.20)" stroke-width="0.8"/>
-
-        <!-- ── TRADE ARC CONNECTIONS ── -->
-
-        <!-- China → Ghana (trans-Indian Ocean / north arc) -->
-        <path d="M 371,155 Q 310,165 270,195 Q 252,212 232,236"
-              fill="none" stroke="rgba(201,168,76,0.55)" stroke-width="1.8"
-              stroke-dasharray="5 4" filter="url(#arcglow)">
-          <animate attributeName="stroke-dashoffset" from="0" to="-180" dur="5s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- China → Nigeria -->
-        <path d="M 371,155 Q 318,178 282,206 Q 260,222 236,234"
-              fill="none" stroke="rgba(201,168,76,0.40)" stroke-width="1.4"
-              stroke-dasharray="4 4">
-          <animate attributeName="stroke-dashoffset" from="0" to="-160" dur="6s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- China → USA (trans-Pacific arc, curving north) -->
-        <path d="M 371,155 Q 330,108 258,100 Q 200,96 144,153"
-              fill="none" stroke="rgba(201,168,76,0.50)" stroke-width="1.8"
-              stroke-dasharray="5 4" filter="url(#arcglow)">
-          <animate attributeName="stroke-dashoffset" from="0" to="-220" dur="7s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Ghana → USA (trans-Atlantic) -->
-        <path d="M 232,236 Q 190,204 165,180 Q 152,165 144,153"
-              fill="none" stroke="rgba(196,98,45,0.55)" stroke-width="1.6"
-              stroke-dasharray="5 4" filter="url(#arcglow)">
-          <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="4.5s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Nigeria → Canada -->
-        <path d="M 236,234 Q 196,196 168,172 Q 152,158 137,146"
-              fill="none" stroke="rgba(196,98,45,0.42)" stroke-width="1.4"
-              stroke-dasharray="4 4">
-          <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="5.5s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- USA → Canada (short local) -->
-        <path d="M 144,153 L 137,146"
-              fill="none" stroke="rgba(226,201,126,0.35)" stroke-width="1.2"
-              stroke-dasharray="3 3">
-          <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- ── CITY MARKERS ── -->
-
-        <!-- Beijing, China -->
-        <circle cx="371" cy="155" r="5.5" fill="#C9A84C" opacity="0.95" filter="url(#cityglow)"/>
-        <circle cx="371" cy="155" r="5.5" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity="0">
-          <animate attributeName="r" values="6;16;6" dur="3s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
-        </circle>
-        <text x="378" y="152" font-family="Outfit,sans-serif" font-size="9.5" fill="#C9A84C" letter-spacing="0.1em" opacity="0.9">BEIJING</text>
-
-        <!-- Accra, Ghana -->
-        <circle cx="232" cy="236" r="4.5" fill="#C4622D" opacity="0.95" filter="url(#cityglow)"/>
-        <circle cx="232" cy="236" r="4.5" fill="none" stroke="#C4622D" stroke-width="1.2" opacity="0">
-          <animate attributeName="r" values="5;14;5" dur="3.8s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.6;0;0.6" dur="3.8s" repeatCount="indefinite"/>
-        </circle>
-        <text x="238" y="234" font-family="Outfit,sans-serif" font-size="9" fill="#C4622D" letter-spacing="0.09em" opacity="0.9">ACCRA</text>
-
-        <!-- Lagos, Nigeria -->
-        <circle cx="242" cy="245" r="4" fill="#C4622D" opacity="0.95" filter="url(#cityglow)"/>
-        <circle cx="242" cy="245" r="4" fill="none" stroke="#C4622D" stroke-width="1" opacity="0">
-          <animate attributeName="r" values="5;13;5" dur="4.2s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.5;0;0.5" dur="4.2s" repeatCount="indefinite"/>
-        </circle>
-        <text x="248" y="243" font-family="Outfit,sans-serif" font-size="9" fill="#C4622D" letter-spacing="0.09em" opacity="0.9">LAGOS</text>
-
-        <!-- New York, USA -->
-        <circle cx="144" cy="153" r="5" fill="#E2C97E" opacity="0.95" filter="url(#cityglow)"/>
-        <circle cx="144" cy="153" r="5" fill="none" stroke="#E2C97E" stroke-width="1.2" opacity="0">
-          <animate attributeName="r" values="6;15;6" dur="3.3s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.6;0;0.6" dur="3.3s" repeatCount="indefinite"/>
-        </circle>
-        <text x="100" y="150" font-family="Outfit,sans-serif" font-size="9.5" fill="#E2C97E" letter-spacing="0.09em" opacity="0.9" text-anchor="end">NEW YORK</text>
-
-        <!-- Toronto, Canada -->
-        <circle cx="137" cy="142" r="4" fill="#E2C97E" opacity="0.90" filter="url(#cityglow)"/>
-        <circle cx="137" cy="142" r="4" fill="none" stroke="#E2C97E" stroke-width="1" opacity="0">
-          <animate attributeName="r" values="5;13;5" dur="4.5s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.5;0;0.5" dur="4.5s" repeatCount="indefinite"/>
-        </circle>
-        <text x="95" y="140" font-family="Outfit,sans-serif" font-size="9" fill="#E2C97E" letter-spacing="0.09em" opacity="0.9" text-anchor="end">TORONTO</text>
-
-      </g>
-
-      <!-- Specular shine -->
-      <circle cx="250" cy="250" r="218" fill="url(#sg)" pointer-events="none"/>
-      <!-- Globe edge -->
-      <circle cx="250" cy="250" r="218" fill="none" stroke="rgba(201,168,76,0.14)" stroke-width="1.5"/>
-      <!-- Outer glow ring -->
-      <circle cx="250" cy="250" r="221" fill="none" stroke="rgba(201,168,76,0.05)" stroke-width="5"/>
-    </svg>
-  </div>
-
-  <div class="hero-content">
+<section class="hero">
+  <div class="hero-left">
     <p class="hero-eyebrow">Connecting Continents · Building Trade</p>
-    <h1 class="hero-title">
-      Trade without<br/><em>boundaries.</em><br/>Commerce with<br/>purpose.
-    </h1>
-    <p class="hero-desc">
-      ClanHeirs bridges markets across China, West Africa, and North America — delivering reliable general merchandise importation with integrity, efficiency, and deep cultural understanding of every market we serve.
-    </p>
+    <h1 class="hero-h1">Trade without<br/><em>boundaries.</em><br/>Commerce<br/>with purpose.</h1>
+    <p class="hero-desc">ClanHeirs bridges markets across China, West Africa, and North America — delivering reliable general merchandise importation with integrity, speed, and deep cultural understanding of every market we serve.</p>
     <div class="hero-actions">
-      <a href="#services" class="btn-primary">Explore Services</a>
-      <a href="#about" class="btn-ghost">Our Story</a>
+      <a href="#services" class="btn btn-dark">Explore Services</a>
+      <a href="#about" class="btn btn-outline">Our Story</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="stat-n">5</div><div class="stat-l">Markets Served</div></div>
+      <div class="hero-stat"><div class="stat-n">3</div><div class="stat-l">Continents</div></div>
+      <div class="hero-stat"><div class="stat-n">100+</div><div class="stat-l">Product Categories</div></div>
     </div>
   </div>
 
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    <span class="scroll-text">Scroll to explore</span>
+  <!-- GLOBE -->
+  <div class="hero-right">
+    <div class="globe-wrap">
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="gc"><circle cx="250" cy="250" r="215"/></clipPath>
+          <radialGradient id="og" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#c8d4e4"/>
+            <stop offset="100%" stop-color="#98aabf"/>
+          </radialGradient>
+          <radialGradient id="sg" cx="28%" cy="24%" r="55%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.25)"/>
+            <stop offset="80%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+          <filter id="cg" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="ag" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="1.5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="250" cy="250" r="215" fill="url(#og)"/>
+        <g clip-path="url(#gc)">
+          <!-- Grid -->
+          <line x1="35" y1="250" x2="465" y2="250" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+          <line x1="35" y1="178" x2="465" y2="178" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <line x1="35" y1="322" x2="465" y2="322" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <line x1="250" y1="35" x2="250" y2="465" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+          <line x1="131" y1="35" x2="131" y2="465" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <line x1="369" y1="35" x2="369" y2="465" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <line x1="72" y1="35" x2="72" y2="465" stroke="rgba(255,255,255,0.08)" stroke-width="0.4"/>
+          <line x1="428" y1="35" x2="428" y2="465" stroke="rgba(255,255,255,0.08)" stroke-width="0.4"/>
+          <!-- N America -->
+          <path d="M78,118C80,100 90,86 102,78L118,72L132,70L140,74L140,84L136,94L130,104L128,116L124,128L122,140L124,154L128,168L130,183L126,198L120,212L116,225L112,232L106,228L100,220L94,225L89,219L87,208L90,198L87,187L80,176L73,162L70,148L70,134L74,122Z" fill="#b8c890" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/>
+          <path d="M100,72L118,68L130,72L122,82L108,86L98,80Z" fill="#b8c890" stroke="rgba(255,255,255,0.5)" stroke-width="0.7"/>
+          <!-- S America -->
+          <path d="M148,252L168,248L186,254L198,270L204,292L207,316L204,340L197,360L183,378L168,390L152,394L138,383L128,362L122,340L120,316L124,296L130,276L138,262Z" fill="#b8c890" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/>
+          <!-- Europe -->
+          <path d="M220,165L235,160L248,156L260,150L268,143L272,135L268,127L260,122L253,130L248,138L243,145L238,152L230,158Z" fill="#b8c890" stroke="rgba(255,255,255,0.55)" stroke-width="0.8"/>
+          <path d="M248,156L262,152L275,155L282,162L278,170L268,174L258,170L250,165Z" fill="#b8c890" stroke="rgba(255,255,255,0.45)" stroke-width="0.7"/>
+          <path d="M252,126L260,118L268,114L272,122L268,132L258,136L250,132Z" fill="#b8c890" stroke="rgba(255,255,255,0.45)" stroke-width="0.7"/>
+          <!-- Africa -->
+          <path d="M224,165L246,163L262,162L278,165L295,172L310,183L318,198L322,214L320,232L315,248L312,264L315,282L313,305L307,325L296,340L280,348L263,344L248,332L238,315L228,294L220,270L215,250L216,233L218,218L215,202L212,188L214,175Z" fill="#a8c080" stroke="rgba(255,255,255,0.6)" stroke-width="0.9"/>
+          <path d="M318,290L324,280L330,290L328,308L320,310Z" fill="#a8c080" stroke="rgba(255,255,255,0.4)" stroke-width="0.7"/>
+          <!-- Eurasia -->
+          <path d="M278,165L296,162L314,158L335,152L356,148L374,148L390,153L406,160L418,168L428,180L432,196L428,210L422,224L414,238L403,250L392,256L378,258L364,254L350,250L338,256L326,258L316,250L312,238L310,224L314,210L318,196L316,182L308,172L295,167L282,164Z" fill="#b8c890" stroke="rgba(255,255,255,0.55)" stroke-width="0.9"/>
+          <path d="M340,210L354,206L362,216L360,232L352,244L340,252L330,248L326,236L328,222Z" fill="#b8c890" stroke="rgba(255,255,255,0.45)" stroke-width="0.8"/>
+          <path d="M378,218L386,226L384,242L375,252L365,248L360,238L364,226Z" fill="#b8c890" stroke="rgba(255,255,255,0.4)" stroke-width="0.7"/>
+          <path d="M250,142L270,132L298,122L330,112L362,106L396,102L428,106L450,116L460,130L448,142L428,150L406,152L383,148L360,146L338,148L316,152L298,156L280,162L264,165L252,162L248,150Z" fill="#b8c890" stroke="rgba(255,255,255,0.45)" stroke-width="0.8"/>
+          <path d="M414,158L420,152L426,158L422,166L414,164Z" fill="#b8c890" stroke="rgba(255,255,255,0.4)" stroke-width="0.7"/>
+          <!-- Australia -->
+          <path d="M388,308L408,302L430,304L444,314L448,330L443,346L432,356L415,360L398,357L383,348L374,334L375,318Z" fill="#b8c890" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
+
+          <!-- Trade arcs -->
+          <path d="M371,155 Q310,165 270,195 Q252,212 232,236" fill="none" stroke="#A07C3A" stroke-width="1.8" stroke-dasharray="5 4" filter="url(#ag)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-180" dur="4.5s" repeatCount="indefinite"/>
+          </path>
+          <path d="M371,155 Q318,178 282,206 Q260,222 242,245" fill="none" stroke="#A07C3A" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.7">
+            <animate attributeName="stroke-dashoffset" from="0" to="-160" dur="6s" repeatCount="indefinite"/>
+          </path>
+          <path d="M371,155 Q330,108 258,100 Q200,96 144,153" fill="none" stroke="#A07C3A" stroke-width="1.8" stroke-dasharray="5 4" filter="url(#ag)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-220" dur="7s" repeatCount="indefinite"/>
+          </path>
+          <path d="M232,236 Q190,204 165,180 Q152,165 144,153" fill="none" stroke="#C44A2A" stroke-width="1.4" stroke-dasharray="5 4" filter="url(#ag)">
+            <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="4s" repeatCount="indefinite"/>
+          </path>
+          <path d="M242,245 Q196,196 168,172 Q152,158 137,146" fill="none" stroke="#C44A2A" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.7">
+            <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="5.5s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- City dots + labels -->
+          <circle cx="371" cy="155" r="6" fill="#A07C3A" filter="url(#cg)"/>
+          <circle cx="371" cy="155" r="6" fill="none" stroke="#A07C3A" stroke-width="1" opacity="0"><animate attributeName="r" values="7;18;7" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"/></circle>
+          <text x="380" y="152" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="#1A1A1A" letter-spacing="0.1em">BEIJING</text>
+
+          <circle cx="232" cy="236" r="5" fill="#C44A2A" filter="url(#cg)"/>
+          <circle cx="232" cy="236" r="5" fill="none" stroke="#C44A2A" stroke-width="1" opacity="0"><animate attributeName="r" values="6;16;6" dur="3.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;0;0.5" dur="3.8s" repeatCount="indefinite"/></circle>
+          <text x="219" y="230" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="#1A1A1A" letter-spacing="0.09em" text-anchor="end">ACCRA</text>
+
+          <circle cx="242" cy="246" r="4.5" fill="#C44A2A" filter="url(#cg)"/>
+          <circle cx="242" cy="246" r="4.5" fill="none" stroke="#C44A2A" stroke-width="1" opacity="0"><animate attributeName="r" values="5;14;5" dur="4.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;0;0.5" dur="4.2s" repeatCount="indefinite"/></circle>
+          <text x="253" y="244" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="#1A1A1A" letter-spacing="0.09em">LAGOS</text>
+
+          <circle cx="144" cy="153" r="5.5" fill="#4A6830" filter="url(#cg)"/>
+          <circle cx="144" cy="153" r="5.5" fill="none" stroke="#4A6830" stroke-width="1" opacity="0"><animate attributeName="r" values="6;15;6" dur="3.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;0;0.5" dur="3.3s" repeatCount="indefinite"/></circle>
+          <text x="132" y="149" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="#1A1A1A" letter-spacing="0.09em" text-anchor="end">NEW YORK</text>
+
+          <circle cx="137" cy="142" r="4" fill="#4A6830" filter="url(#cg)"/>
+          <circle cx="137" cy="142" r="4" fill="none" stroke="#4A6830" stroke-width="1" opacity="0"><animate attributeName="r" values="5;13;5" dur="4.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;0;0.5" dur="4.5s" repeatCount="indefinite"/></circle>
+          <text x="125" y="138" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="#1A1A1A" letter-spacing="0.09em" text-anchor="end">TORONTO</text>
+        </g>
+        <circle cx="250" cy="250" r="215" fill="url(#sg)" pointer-events="none"/>
+        <circle cx="250" cy="250" r="215" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="hero-scroll"><div class="scroll-arr"></div>Scroll</div>
   </div>
 </section>
 
-<!-- STATS BAR -->
-<div class="stats-bar">
-  <div class="stat-item reveal">
-    <div class="stat-number">5</div>
-    <div class="stat-label">Markets Served</div>
-  </div>
-  <div class="stat-item reveal reveal-delay-1">
-    <div class="stat-number">3</div>
-    <div class="stat-label">Continents</div>
-  </div>
-  <div class="stat-item reveal reveal-delay-2">
-    <div class="stat-number">100<span style="font-size:28px">+</span></div>
-    <div class="stat-label">Product Categories</div>
-  </div>
-  <div class="stat-item reveal reveal-delay-3">
-    <div class="stat-number">24/7</div>
-    <div class="stat-label">Trade Support</div>
-  </div>
+<!-- USP BAR -->
+<div class="usp-bar">
+  <div class="usp-item"><div class="usp-icon"><svg viewBox="0 0 24 24"><path d="M21 10H3"/><path d="M21 6H3"/><path d="M21 14H3"/><path d="M21 18H3"/></svg></div><div><div class="usp-tt">Direct Factory Access</div><div class="usp-ts">Vetted manufacturers across China's trading hubs</div></div></div>
+  <div class="usp-item"><div class="usp-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="usp-tt">3 Continents</div><div class="usp-ts">Offices &amp; partners in Asia, Africa and North America</div></div></div>
+  <div class="usp-item"><div class="usp-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><div class="usp-tt">Full Compliance</div><div class="usp-ts">End-to-end customs, documentation &amp; clearance</div></div></div>
+  <div class="usp-item"><div class="usp-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="usp-tt">24/7 Trade Support</div><div class="usp-ts">Dedicated account management across time zones</div></div></div>
 </div>
 
 <!-- ABOUT -->
-<section id="about">
-  <div class="about-left reveal">
-    <p class="section-eyebrow">Who We Are</p>
-    <h2 class="section-title">A heritage of trade.<br/>A <em>vision</em> for tomorrow.</h2>
-    <p class="about-text">
-      ClanHeirs was founded on a simple conviction: that the world's most dynamic economies — China's manufacturing power, West Africa's rising consumer markets, and North America's distribution depth — deserve a trade partner built on <strong>trust, speed, and local insight</strong>.
-    </p>
-    <p class="about-text">
-      We are more than an importer. We are a bridge between cultures, a connector of supply chains, and a committed partner in the growth of businesses across <strong>Ghana, Nigeria, the United States, and Canada</strong> — sourcing quality merchandise directly from China's most reliable producers.
-    </p>
-    <p class="about-text">
-      Our name reflects our ethos: the heirs of a global clan — one family of commerce, spanning oceans and cultures.
-    </p>
-  </div>
-
-  <div class="about-right">
-    <div class="about-card reveal reveal-delay-1">
-      <div class="about-card-num">01</div>
-      <div class="about-card-title">China Sourcing Hub</div>
-      <div class="about-card-desc">Direct relationships with vetted Chinese manufacturers ensure product quality and competitive pricing at scale.</div>
-    </div>
-    <div class="about-card reveal reveal-delay-2">
-      <div class="about-card-num">02</div>
-      <div class="about-card-title">Africa Market Expertise</div>
-      <div class="about-card-desc">With operations in Ghana and Nigeria, we understand local market demands, regulations, and distribution channels intimately.</div>
-    </div>
-    <div class="about-card reveal reveal-delay-3">
-      <div class="about-card-num">03</div>
-      <div class="about-card-title">North American Presence</div>
-      <div class="about-card-desc">US and Canadian operations enable efficient warehousing, customs compliance, and last-mile delivery across the continent.</div>
+<section class="section" id="about">
+  <div class="si">
+    <div class="sh reveal"><div><div class="sh-ey">Who We Are</div><div class="sh-ti">A heritage of trade. A <em>vision</em> for tomorrow.</div></div><a href="#contact" class="sh-link">Work With Us</a></div>
+    <div class="ab-split">
+      <div class="ab-l reveal">
+        <p class="ab-p">ClanHeirs was founded on a simple conviction: that the world's most dynamic economies — China's manufacturing power, West Africa's rising consumer markets, and North America's distribution depth — deserve a trade partner built on <strong>trust, speed, and local insight</strong>.</p>
+        <p class="ab-p">We are more than an importer. We are a bridge between cultures, a connector of supply chains, and a committed partner in the growth of businesses across <strong>Ghana, Nigeria, the United States, and Canada</strong> — sourcing quality merchandise directly from China's most reliable producers.</p>
+        <p class="ab-p">Our name reflects our ethos: the heirs of a global clan — one family of commerce, spanning oceans and cultures, bound by integrity and a shared ambition to trade better.</p>
+        <div style="margin-top:40px"><a href="#services" class="btn btn-dark">View Services</a></div>
+      </div>
+      <div class="ab-r reveal d1">
+        <div class="pillars">
+          <div class="pillar"><div class="pn">01</div><div><div class="pt">China Sourcing Hub</div><div class="pd">Direct relationships with vetted Chinese manufacturers in Guangzhou, Yiwu, Shenzhen and Shanghai ensure product quality and competitive pricing at scale.</div></div></div>
+          <div class="pillar"><div class="pn">02</div><div><div class="pt">Africa Market Expertise</div><div class="pd">With operations in Ghana and Nigeria, we understand local market demands, import regulations, and distribution channels intimately.</div></div></div>
+          <div class="pillar"><div class="pn">03</div><div><div class="pt">North American Presence</div><div class="pd">US and Canadian operations enable efficient warehousing, customs compliance, and last-mile delivery for businesses of all sizes across the continent.</div></div></div>
+          <div class="pillar"><div class="pn">04</div><div><div class="pt">Scalable Infrastructure</div><div class="pd">From a first small-business import order to enterprise-scale supply contracts, our infrastructure grows with your business ambitions.</div></div></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- MARKETS -->
-<section id="markets">
-  <div class="markets-header reveal">
-    <p class="section-eyebrow" style="justify-content:center"><span></span>Our Markets</p>
-    <h2 class="section-title" style="text-align:center">Where we <em>operate</em></h2>
-  </div>
-
+<section class="section" id="markets">
+  <div class="si"><div class="sh reveal"><div><div class="sh-ey">Our Markets</div><div class="sh-ti">Where we <em>operate</em></div></div></div></div>
   <div class="markets-grid">
-    <div class="market-card reveal">
-      <span class="market-flag">
-        <svg viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="32" fill="#DE2910"/><polygon points="8,4 9.5,8.5 14,8.5 10.3,11.2 11.8,15.7 8,13 4.2,15.7 5.7,11.2 2,8.5 6.5,8.5" fill="#FFDE00"/><polygon points="17,2 17.8,4.3 20.2,4.3 18.3,5.7 19,8 17,6.6 15,8 15.7,5.7 13.8,4.3 16.2,4.3" fill="#FFDE00"/><polygon points="21,6 21.5,7.6 23.2,7.6 21.8,8.6 22.3,10.2 21,9.2 19.7,10.2 20.2,8.6 18.8,7.6 20.5,7.6" fill="#FFDE00"/><polygon points="21,12 21.5,13.6 23.2,13.6 21.8,14.6 22.3,16.2 21,15.2 19.7,16.2 20.2,14.6 18.8,13.6 20.5,13.6" fill="#FFDE00"/><polygon points="17,16 17.8,18.3 20.2,18.3 18.3,19.7 19,22 17,20.6 15,22 15.7,19.7 13.8,18.3 16.2,18.3" fill="#FFDE00"/></svg>
-      </span>
-      <div class="market-region">Asia · East</div>
-      <h3 class="market-name">China</h3>
-      <p class="market-desc">Our primary sourcing base. We partner with factories and wholesale hubs across Guangzhou, Yiwu, Shenzhen, and Shanghai to bring you cost-effective, quality merchandise.</p>
-      <div class="market-tags">
-        <span class="market-tag">Manufacturing</span>
-        <span class="market-tag">Sourcing</span>
-        <span class="market-tag">Wholesale</span>
+    <!-- China -->
+    <div class="mc reveal">
+      <div class="mf">
+        <div class="fi-wrap">
+          <svg width="58" height="38" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="32" fill="#DE2910"/><polygon points="8,4 9.5,8.5 14,8.5 10.3,11.2 11.8,15.7 8,13 4.2,15.7 5.7,11.2 2,8.5 6.5,8.5" fill="#FFDE00"/><polygon points="17,2 17.8,4.3 20.2,4.3 18.3,5.7 19,8 17,6.6 15,8 15.7,5.7 13.8,4.3 16.2,4.3" fill="#FFDE00"/><polygon points="21,6 21.5,7.6 23.2,7.6 21.8,8.6 22.3,10.2 21,9.2 19.7,10.2 20.2,8.6 18.8,7.6 20.5,7.6" fill="#FFDE00"/><polygon points="21,12 21.5,13.6 23.2,13.6 21.8,14.6 22.3,16.2 21,15.2 19.7,16.2 20.2,14.6 18.8,13.6 20.5,13.6" fill="#FFDE00"/><polygon points="17,16 17.8,18.3 20.2,18.3 18.3,19.7 19,22 17,20.6 15,22 15.7,19.7 13.8,18.3 16.2,18.3" fill="#FFDE00"/></svg>
+          <span class="fn">China</span>
+        </div>
       </div>
+      <div class="mr">Asia · East</div>
+      <div class="mn">China</div>
+      <p class="md">Our primary sourcing base. We partner with factories and wholesale hubs across Guangzhou, Yiwu, Shenzhen, and Shanghai to bring cost-effective, quality merchandise to your market.</p>
+      <div class="mts"><span class="mt">Manufacturing</span><span class="mt">Sourcing</span><span class="mt">Wholesale</span><span class="mt">Factory Audits</span></div>
     </div>
-
-    <div class="market-card africa reveal reveal-delay-1">
-      <span class="market-flag">
-        <svg viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M16 3 L20 3 L24 5 L26 8 L25 12 L28 14 L30 18 L29 22 L26 26 L22 29 L18 28 L16 25 L13 22 L12 18 L14 14 L13 10 L14 6 Z" stroke="rgba(201,168,76,0.6)" stroke-width="1.2" fill="rgba(201,168,76,0.08)"/><circle cx="19" cy="15" r="1.2" fill="rgba(201,168,76,0.5)"/><circle cx="22" cy="11" r="0.8" fill="rgba(196,98,45,0.6)"/></svg>
-      </span>
-      <div class="market-region">Africa · West</div>
-      <h3 class="market-name">Ghana &<br/>Nigeria</h3>
-      <p class="market-desc">Two of West Africa's most vibrant economies. We serve importers, retailers, and distributors in Accra, Kumasi, Lagos, and Abuja — navigating local regulations with ease.</p>
-      <div class="market-tags">
-        <span class="market-tag">Distribution</span>
-        <span class="market-tag">Retail Supply</span>
-        <span class="market-tag">Customs Clearance</span>
+    <!-- Ghana & Nigeria -->
+    <div class="mc reveal d1">
+      <div class="mf">
+        <div class="fi-wrap">
+          <svg width="58" height="38" viewBox="0 0 54 36" xmlns="http://www.w3.org/2000/svg"><rect width="54" height="12" y="0" fill="#006B3F"/><rect width="54" height="12" y="12" fill="#FCD116"/><rect width="54" height="12" y="24" fill="#CE1126"/><polygon points="27,11 28.7,16.2 34.2,16.2 29.8,19.4 31.5,24.6 27,21.4 22.5,24.6 24.2,19.4 19.8,16.2 25.3,16.2" fill="#000"/></svg>
+          <span class="fn">Ghana</span>
+        </div>
+        <div class="fi-wrap">
+          <svg width="58" height="38" viewBox="0 0 54 36" xmlns="http://www.w3.org/2000/svg"><rect width="18" height="36" x="0" fill="#008751"/><rect width="18" height="36" x="18" fill="#FFFFFF"/><rect width="18" height="36" x="36" fill="#008751"/></svg>
+          <span class="fn">Nigeria</span>
+        </div>
       </div>
+      <div class="mr">Africa · West</div>
+      <div class="mn">Ghana &amp;<br/>Nigeria</div>
+      <p class="md">Two of West Africa's most vibrant economies. We serve importers, retailers, and distributors in Accra, Kumasi, Lagos, and Abuja — navigating local regulations and customs with expertise.</p>
+      <div class="mts"><span class="mt">Distribution</span><span class="mt">Retail Supply</span><span class="mt">Customs Clearance</span><span class="mt">Local Networks</span></div>
     </div>
-
-    <div class="market-card northam reveal reveal-delay-2">
-      <span class="market-flag">
-        <svg viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M10 5 L18 4 L24 6 L26 10 L22 13 L20 17 L16 20 L12 18 L8 14 L8 9 Z" stroke="rgba(226,201,126,0.6)" stroke-width="1.2" fill="rgba(226,201,126,0.07)"/><path d="M26 10 L32 8 L36 11 L34 16 L30 19 L26 17 L24 13 Z" stroke="rgba(226,201,126,0.4)" stroke-width="1" fill="rgba(226,201,126,0.05)"/><circle cx="15" cy="11" r="1" fill="rgba(226,201,126,0.5)"/><circle cx="28" cy="13" r="0.8" fill="rgba(226,201,126,0.4)"/></svg>
-      </span>
-      <div class="market-region">North America</div>
-      <h3 class="market-name">USA &<br/>Canada</h3>
-      <p class="market-desc">With established logistics networks across major US and Canadian cities, we facilitate seamless importation, warehousing, and distribution for businesses of all sizes.</p>
-      <div class="market-tags">
-        <span class="market-tag">Logistics</span>
-        <span class="market-tag">Warehousing</span>
-        <span class="market-tag">B2B Supply</span>
+    <!-- USA & Canada -->
+    <div class="mc reveal d2">
+      <div class="mf">
+        <div class="fi-wrap">
+          <svg width="58" height="38" viewBox="0 0 54 36" xmlns="http://www.w3.org/2000/svg"><rect width="54" height="36" fill="#B22234"/><rect y="2.77" width="54" height="2.77" fill="#FFF"/><rect y="8.31" width="54" height="2.77" fill="#FFF"/><rect y="13.85" width="54" height="2.77" fill="#FFF"/><rect y="19.38" width="54" height="2.77" fill="#FFF"/><rect y="24.92" width="54" height="2.77" fill="#FFF"/><rect y="30.46" width="54" height="2.77" fill="#FFF"/><rect width="21" height="19.4" fill="#3C3B6E"/><g fill="#FFF"><circle cx="2.5" cy="2" r="1"/><circle cx="5.5" cy="2" r="1"/><circle cx="8.5" cy="2" r="1"/><circle cx="11.5" cy="2" r="1"/><circle cx="14.5" cy="2" r="1"/><circle cx="17.5" cy="2" r="1"/><circle cx="4" cy="4.5" r="1"/><circle cx="7" cy="4.5" r="1"/><circle cx="10" cy="4.5" r="1"/><circle cx="13" cy="4.5" r="1"/><circle cx="16" cy="4.5" r="1"/><circle cx="19" cy="4.5" r="1"/><circle cx="2.5" cy="7" r="1"/><circle cx="5.5" cy="7" r="1"/><circle cx="8.5" cy="7" r="1"/><circle cx="11.5" cy="7" r="1"/><circle cx="14.5" cy="7" r="1"/><circle cx="17.5" cy="7" r="1"/><circle cx="4" cy="9.5" r="1"/><circle cx="7" cy="9.5" r="1"/><circle cx="10" cy="9.5" r="1"/><circle cx="13" cy="9.5" r="1"/><circle cx="16" cy="9.5" r="1"/><circle cx="19" cy="9.5" r="1"/><circle cx="2.5" cy="12" r="1"/><circle cx="5.5" cy="12" r="1"/><circle cx="8.5" cy="12" r="1"/><circle cx="11.5" cy="12" r="1"/><circle cx="14.5" cy="12" r="1"/><circle cx="17.5" cy="12" r="1"/><circle cx="4" cy="14.5" r="1"/><circle cx="7" cy="14.5" r="1"/><circle cx="10" cy="14.5" r="1"/><circle cx="13" cy="14.5" r="1"/><circle cx="16" cy="14.5" r="1"/><circle cx="19" cy="14.5" r="1"/><circle cx="2.5" cy="17" r="1"/><circle cx="5.5" cy="17" r="1"/><circle cx="8.5" cy="17" r="1"/><circle cx="11.5" cy="17" r="1"/><circle cx="14.5" cy="17" r="1"/><circle cx="17.5" cy="17" r="1"/></g></svg>
+          <span class="fn">USA</span>
+        </div>
+        <div class="fi-wrap">
+          <svg width="58" height="38" viewBox="0 0 54 36" xmlns="http://www.w3.org/2000/svg"><rect width="54" height="36" fill="#FF0000"/><rect x="13.5" width="27" height="36" fill="#FFFFFF"/><path d="M27,6L28.4,10.2L32.8,9L30.6,12.8L34.5,14.3L30.9,15.8L31.8,20L28.2,18L27,22L25.8,18L22.2,20L23.1,15.8L19.5,14.3L23.4,12.8L21.2,9L25.6,10.2Z" fill="#FF0000"/><rect x="25.5" y="22" width="3" height="8" fill="#FF0000"/></svg>
+          <span class="fn">Canada</span>
+        </div>
       </div>
+      <div class="mr">North America</div>
+      <div class="mn">USA &amp;<br/>Canada</div>
+      <p class="md">Established logistics networks across major US and Canadian cities facilitate seamless importation, warehousing, and B2B distribution for businesses of all sizes.</p>
+      <div class="mts"><span class="mt">Logistics</span><span class="mt">Warehousing</span><span class="mt">B2B Supply</span><span class="mt">Last-Mile</span></div>
     </div>
   </div>
 </section>
 
 <!-- SERVICES -->
-<section id="services">
-  <div class="services-layout">
-    <div class="services-left reveal">
-      <p class="section-eyebrow">What We Do</p>
-      <h2 class="section-title">End-to-end <em>trade</em> solutions</h2>
-      <p>From factory floor to your door, ClanHeirs manages every step of the importation journey — so you can focus on growing your business.</p>
-    </div>
-
-    <div class="services-grid">
-      <div class="service-item reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><line x1="12" y1="13" x2="12" y2="21"/></svg>
-        </div>
-        <div class="service-name">Product Sourcing</div>
-        <div class="service-desc">We identify and negotiate with the right manufacturers in China, ensuring quality standards and competitive factory pricing for your category.</div>
-      </div>
-      <div class="service-item reveal reveal-delay-1">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 20h20"/><path d="M5 20V10l7-7 7 7v10"/><path d="M12 13a3 3 0 0 1 3 3v4H9v-4a3 3 0 0 1 3-3z"/><path d="M3 10h18"/></svg>
-        </div>
-        <div class="service-name">Freight & Shipping</div>
-        <div class="service-desc">Sea and air freight solutions tailored to your timeline and budget, with full tracking from port of origin to destination.</div>
-      </div>
-      <div class="service-item reveal reveal-delay-2">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </div>
-        <div class="service-name">Customs & Compliance</div>
-        <div class="service-desc">Expert handling of import documentation, tariff classification, and customs clearance across all our operating countries.</div>
-      </div>
-      <div class="service-item reveal reveal-delay-3">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
-        </div>
-        <div class="service-name">Warehousing</div>
-        <div class="service-desc">Secure, climate-appropriate storage facilities in key cities across Ghana, Nigeria, US, and Canada for short and long-term needs.</div>
-      </div>
-      <div class="service-item reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
-        </div>
-        <div class="service-name">Quality Inspection</div>
-        <div class="service-desc">Pre-shipment inspections and factory audits to ensure every order meets your specifications before it leaves China.</div>
-      </div>
-      <div class="service-item reveal reveal-delay-1">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="service-name">Trade Consulting</div>
-        <div class="service-desc">Strategic advisory for businesses entering new markets — from pricing strategy to regulatory guidance across all our markets.</div>
-      </div>
-    </div>
+<section class="section" id="services">
+  <div class="si"><div class="sh reveal"><div><div class="sh-ey">What We Do</div><div class="sh-ti">End-to-end <em>trade</em> solutions</div></div><a href="#contact" class="sh-link">Get a Quote</a></div></div>
+  <div class="svc-grid">
+    <div class="svc reveal"><div class="si2"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><line x1="12" y1="13" x2="12" y2="21"/></svg></div><div class="sn">Product Sourcing</div><div class="sd">We identify and negotiate with the right manufacturers in China, ensuring quality standards and competitive factory pricing for your specific category and volume requirements.</div></div>
+    <div class="svc reveal d1"><div class="si2"><svg viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="16" r="1"/></svg></div><div class="sn">Freight &amp; Shipping</div><div class="sd">Sea and air freight solutions tailored to your timeline and budget, with full shipment tracking from port of origin to final destination across all our markets.</div></div>
+    <div class="svc reveal d2"><div class="si2"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div class="sn">Customs &amp; Compliance</div><div class="sd">Expert handling of import documentation, tariff classification, HS codes, and customs clearance across Ghana, Nigeria, the United States, and Canada.</div></div>
+    <div class="svc reveal"><div class="si2"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div><div class="sn">Warehousing</div><div class="sd">Secure, climate-appropriate storage facilities in key cities across Ghana, Nigeria, the US, and Canada for short-term consolidation and long-term inventory management.</div></div>
+    <div class="svc reveal d1"><div class="si2"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></svg></div><div class="sn">Quality Inspection</div><div class="sd">Pre-shipment inspections and factory audits conducted in China to ensure every order meets your exact specifications before goods leave the factory floor.</div></div>
+    <div class="svc reveal d2"><div class="si2"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="sn">Trade Consulting</div><div class="sd">Strategic advisory for businesses entering new markets — regulatory guidance, pricing strategy, supplier vetting, and market entry planning across all regions we serve.</div></div>
   </div>
 </section>
 
-<!-- TRADE ROUTE / PRODUCTS -->
-<section id="route">
-  <div class="route-header">
-    <div class="reveal">
-      <p class="section-eyebrow">Our Trade Network</p>
-      <h2 class="section-title">A living <em>supply chain</em></h2>
+<!-- TRADE ROUTE -->
+<section class="section route-sec" id="products">
+  <div class="si">
+    <div class="sh reveal"><div><div class="sh-ey">Our Trade Network</div><div class="sh-ti">A living <em>supply chain</em></div></div></div>
+    <div class="rv reveal">
+      <div class="rn"><div class="rdot gd"></div><div class="rl">China</div></div>
+      <div class="rline g"></div>
+      <div class="rn"><div class="rdot rd"></div><div class="rl">Ghana</div></div>
+      <div class="rline r"></div>
+      <div class="rn"><div class="rdot rd"></div><div class="rl">Nigeria</div></div>
+      <div class="rline"></div>
+      <div class="rn"><div class="rdot"></div><div class="rl">USA</div></div>
+      <div class="rline"></div>
+      <div class="rn"><div class="rdot"></div><div class="rl">Canada</div></div>
     </div>
-    <div class="reveal reveal-delay-1">
-      <p>Our trade routes connect China's industrial heartland to the markets of West Africa and North America — a network built over years of relationships, refined with every shipment we deliver.</p>
-      <div class="route-visual" style="margin-top:40px">
-        <div class="route-nodes" style="display:flex;align-items:center;gap:0;width:100%">
-          <div class="route-node">
-            <div class="route-dot"></div>
-            <div class="route-label">China</div>
-          </div>
-          <div class="route-line" style="flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.5),rgba(201,168,76,0.1));position:relative;overflow:hidden;margin:0 8px;margin-bottom:24px">
-            <div style="position:absolute;top:-1px;left:-40%;width:40%;height:3px;background:var(--gold);border-radius:2px;animation:tradeRoute 3s ease-in-out infinite"></div>
-          </div>
-          <div class="route-node">
-            <div class="route-dot" style="background:var(--terracotta);box-shadow:0 0 16px rgba(196,98,45,0.5)"></div>
-            <div class="route-label" style="color:var(--terracotta)">Africa</div>
-          </div>
-          <div class="route-line" style="flex:1;height:1px;background:linear-gradient(to right,rgba(196,98,45,0.3),rgba(201,168,76,0.2));position:relative;overflow:hidden;margin:0 8px;margin-bottom:24px">
-            <div style="position:absolute;top:-1px;left:-40%;width:40%;height:3px;background:var(--terracotta);border-radius:2px;animation:tradeRoute 3s ease-in-out infinite 1s"></div>
-          </div>
-          <div class="route-node">
-            <div class="route-dot" style="background:var(--gold-light);box-shadow:0 0 16px rgba(226,201,126,0.5)"></div>
-            <div class="route-label" style="color:var(--gold-light)">N. America</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="sh-ey reveal" style="padding:0 0 24px">Product Categories We Import</div>
   </div>
-
-  <div class="reveal">
-    <p class="section-eyebrow">Product Categories</p>
-    <div class="categories-grid" style="margin-top:24px">
-      <div class="cat-item">
-        <span class="cat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-        <div class="cat-name">Home & Living</div>
-      </div>
-      <div class="cat-item">
-        <span class="cat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.86H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.86l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></span>
-        <div class="cat-name">Apparel & Textiles</div>
-      </div>
-      <div class="cat-item">
-        <span class="cat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
-        <div class="cat-name">Electronics</div>
-      </div>
-      <div class="cat-item">
-        <span class="cat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
-        <div class="cat-name">Health & Beauty</div>
-      </div>
-      <div class="cat-item">
-        <span class="cat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-        <div class="cat-name">Toys & Gifts</div>
-      </div>
-      <div class="cat-item">
-        <span class="cat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
-        <div class="cat-name">Hardware & Tools</div>
-      </div>
-    </div>
+  <div class="cat-grid reveal">
+    <div class="ci2"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="cn">Home &amp; Living</div></div>
+    <div class="ci2"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.86H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.86l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg><div class="cn">Apparel &amp; Textiles</div></div>
+    <div class="ci2"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><div class="cn">Electronics</div></div>
+    <div class="ci2"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><div class="cn">Health &amp; Beauty</div></div>
+    <div class="ci2"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><div class="cn">Toys &amp; Gifts</div></div>
+    <div class="ci2"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><div class="cn">Hardware &amp; Tools</div></div>
   </div>
 </section>
 
-<!-- WHY US -->
-<section id="why">
-  <p class="section-eyebrow reveal">Why ClanHeirs</p>
-  <h2 class="section-title reveal">Built on trust.<br/><em>Delivered</em> with excellence.</h2>
+<!-- WHY -->
+<section class="section">
+  <div class="si"><div class="sh reveal"><div><div class="sh-ey">Why ClanHeirs</div><div class="sh-ti">Built on trust. <em>Delivered</em> with excellence.</div></div></div></div>
   <div class="why-grid">
-    <div class="why-item reveal">
-      <div class="why-num">01</div>
-      <h3 class="why-title">Local Knowledge</h3>
-      <p class="why-desc">We don't just know the markets — we live in them. Our teams on the ground in Accra, Lagos, and beyond ensure nothing gets lost in translation.</p>
-    </div>
-    <div class="why-item reveal reveal-delay-1">
-      <div class="why-num">02</div>
-      <h3 class="why-title">Vetted Suppliers</h3>
-      <p class="why-desc">Every factory partner in our China network undergoes rigorous vetting. You get quality assurance before goods even ship.</p>
-    </div>
-    <div class="why-item reveal reveal-delay-2">
-      <div class="why-num">03</div>
-      <h3 class="why-title">Full Transparency</h3>
-      <p class="why-desc">Real-time shipment tracking, clear pricing, and honest timelines. No hidden fees, no surprises — just reliable commerce.</p>
-    </div>
-    <div class="why-item reveal reveal-delay-3">
-      <div class="why-num">04</div>
-      <h3 class="why-title">Scalable Solutions</h3>
-      <p class="why-desc">From small business first imports to enterprise-scale supply contracts, our infrastructure scales to meet your ambitions.</p>
-    </div>
+    <div class="wi reveal"><div class="wnum">01</div><div class="wt">Local Knowledge</div><div class="wd">We don't just know the markets — we live in them. Our teams on the ground in Accra, Lagos, and beyond ensure nothing gets lost in translation.</div></div>
+    <div class="wi reveal d1"><div class="wnum">02</div><div class="wt">Vetted Suppliers</div><div class="wd">Every factory partner in our China network undergoes rigorous vetting and ongoing auditing. You get quality assurance before goods even ship.</div></div>
+    <div class="wi reveal d2"><div class="wnum">03</div><div class="wt">Full Transparency</div><div class="wd">Real-time shipment tracking, clear pricing, and honest timelines. No hidden fees, no surprises — just reliable commerce from day one.</div></div>
+    <div class="wi reveal d3"><div class="wnum">04</div><div class="wt">Scalable Solutions</div><div class="wd">From a first small-business import to enterprise-scale supply contracts — our infrastructure and team scale to meet your growth ambitions.</div></div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
-  <div class="contact-left">
-    <p class="section-eyebrow">Get in Touch</p>
-    <h2 class="section-title">Ready to <em>trade</em> smarter?</h2>
-    <p>Whether you're a retailer looking to source from China, a distributor in West Africa, or a North American business seeking import support — we're here to make it happen.</p>
-    <div class="contact-info">
-      <div class="contact-info-item">
-        <span class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-        <div>
-          <div class="ci-label">Global Offices</div>
-          <div class="ci-value">Accra, Ghana · Lagos, Nigeria<br/>USA · Canada · China</div>
+<section class="section" id="contact">
+  <div class="si">
+    <div class="sh reveal"><div><div class="sh-ey">Get in Touch</div><div class="sh-ti">Ready to trade <em>smarter?</em></div></div></div>
+    <div class="ctc">
+      <div class="cl reveal">
+        <p class="ab-p">Whether you're a retailer looking to source from China, a distributor in West Africa, or a North American business seeking import support — we're here to make it happen. Tell us about your trade needs and our team will be in touch within 24 hours.</p>
+        <div class="cinfos">
+          <div class="cii"><div class="cii-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="cil">Global Offices</div><div class="civ">Accra, Ghana · Lagos, Nigeria<br/>USA · Canada · China</div></div></div>
+          <div class="cii"><div class="cii-ic"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="cil">Email</div><div class="civ">info@clanheirs.com<br/>trade@clanheirs.com</div></div></div>
+          <div class="cii"><div class="cii-ic"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 7 7l1.27-.85a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="cil">Phone</div><div class="civ">+1 (000) 000-0000<br/>+233 00 000 0000</div></div></div>
         </div>
       </div>
-      <div class="contact-info-item">
-        <span class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-        <div>
-          <div class="ci-label">Email</div>
-          <div class="ci-value">info@clanheirs.com<br/>trade@clanheirs.com</div>
+      <div class="cr reveal d1">
+        <div class="form">
+          <div class="frow">
+            <div class="fg"><label class="fl">Full Name</label><input type="text" class="fi" placeholder="Your name"/></div>
+            <div class="fg"><label class="fl">Company</label><input type="text" class="fi" placeholder="Company name"/></div>
+          </div>
+          <div class="fg"><label class="fl">Email Address</label><input type="email" class="fi" placeholder="you@company.com"/></div>
+          <div class="fg"><label class="fl">Market Interest</label><select class="fs"><option value="" disabled selected>Select a market</option><option>China → Ghana</option><option>China → Nigeria</option><option>China → USA</option><option>China → Canada</option><option>Multi-market</option><option>Other / Not sure</option></select></div>
+          <div class="fg"><label class="fl">Product Category</label><select class="fs"><option value="" disabled selected>Select a category</option><option>Home &amp; Living</option><option>Apparel &amp; Textiles</option><option>Electronics</option><option>Health &amp; Beauty</option><option>Toys &amp; Gifts</option><option>Hardware &amp; Tools</option><option>Multiple / Other</option></select></div>
+          <div class="fg"><label class="fl">Message</label><textarea class="ft" placeholder="Tell us about your trade needs — volumes, timelines, and any specific requirements..."></textarea></div>
+          <button class="fsub">Send Trade Inquiry →</button>
         </div>
       </div>
-      <div class="contact-info-item">
-        <span class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 7 7l1.27-.85a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-        <div>
-          <div class="ci-label">Phone</div>
-          <div class="ci-value">+1 (000) 000-0000<br/>+233 00 000 0000</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="contact-right">
-    <p class="section-eyebrow">Trade Inquiry</p>
-    <div class="contact-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" class="form-input" placeholder="Your name" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Company</label>
-          <input type="text" class="form-input" placeholder="Company name" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <input type="email" class="form-input" placeholder="you@company.com" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Market Interest</label>
-        <select class="form-select">
-          <option value="" disabled selected>Select a market</option>
-          <option>China → Ghana</option>
-          <option>China → Nigeria</option>
-          <option>China → USA</option>
-          <option>China → Canada</option>
-          <option>Multi-market</option>
-          <option>Other / Not sure</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Message</label>
-        <textarea class="form-textarea" placeholder="Tell us about your trade needs..."></textarea>
-      </div>
-      <button class="form-submit">Send Inquiry →</button>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
+<div class="f-motif">
+  <div class="f-big">ClanHeirs</div>
+  <div class="f-tag">Heirs to a world of trade</div>
+</div>
 <footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="logo">
-        <span class="logo-main">ClanHeirs</span>
-        <span class="logo-sub" style="margin-top:6px">Global Merchandise Group</span>
-      </div>
+  <div class="f-main">
+    <div class="fc fa">
+      <div class="fct">ClanHeirs</div>
       <p>Bridging the world's most dynamic markets through reliable importation, deep cultural intelligence, and an unwavering commitment to trade done right.</p>
     </div>
-
-    <div>
-      <div class="footer-col-title">Company</div>
-      <ul class="footer-links">
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#markets">Markets</a></li>
-        <li><a href="#contact">Careers</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="footer-col-title">Markets</div>
-      <ul class="footer-links">
-        <li><a href="#">China</a></li>
-        <li><a href="#">Ghana</a></li>
-        <li><a href="#">Nigeria</a></li>
-        <li><a href="#">USA & Canada</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="footer-col-title">Services</div>
-      <ul class="footer-links">
-        <li><a href="#">Sourcing</a></li>
-        <li><a href="#">Freight</a></li>
-        <li><a href="#">Customs</a></li>
-        <li><a href="#">Warehousing</a></li>
-      </ul>
-    </div>
+    <div class="fc"><div class="fct">Company</div><ul class="flinks"><li><a href="#about">About Us</a></li><li><a href="#services">Services</a></li><li><a href="#markets">Markets</a></li><li><a href="#contact">Careers</a></li><li><a href="#contact">Contact</a></li></ul></div>
+    <div class="fc"><div class="fct">Markets</div><ul class="flinks"><li><a href="#">China</a></li><li><a href="#">Ghana</a></li><li><a href="#">Nigeria</a></li><li><a href="#">United States</a></li><li><a href="#">Canada</a></li></ul></div>
+    <div class="fc"><div class="fct">Services</div><ul class="flinks"><li><a href="#">Product Sourcing</a></li><li><a href="#">Freight &amp; Shipping</a></li><li><a href="#">Customs &amp; Compliance</a></li><li><a href="#">Warehousing</a></li><li><a href="#">Quality Inspection</a></li><li><a href="#">Trade Consulting</a></li></ul></div>
   </div>
-
-  <div class="footer-bottom">
-    <span class="footer-copy">© 2025 ClanHeirs Global Merchandise Group. All rights reserved.</span>
-    <span class="footer-tagline">Heirs to a world of trade.</span>
+  <div class="f-bot">
+    <span class="f-copy">© 2025 ClanHeirs Global Merchandise Group. All rights reserved.</span>
+    <span class="f-mkt">China · Ghana · Nigeria · USA · Canada</span>
   </div>
 </footer>
 
 <script>
-  // Nav scroll effect
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 60);
-  });
-
-  // Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  revealEls.forEach(el => observer.observe(el));
-
-  // Smooth scroll for anchor links
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
   document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
-    });
+    a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); } });
   });
 </script>
 </body>
