@@ -559,17 +559,61 @@ ul{list-style:none;}
         </div>
       </div>
       <div class="cr reveal d1">
-        <div class="form">
-          <div class="frow">
-            <div class="fg"><label class="fl">Full Name</label><input type="text" class="fi" placeholder="Your name"/></div>
-            <div class="fg"><label class="fl">Company</label><input type="text" class="fi" placeholder="Company name"/></div>
-          </div>
-          <div class="fg"><label class="fl">Email Address</label><input type="email" class="fi" placeholder="you@company.com"/></div>
-          <div class="fg"><label class="fl">Market Interest</label><select class="fs"><option value="" disabled selected>Select a market</option><option>China → Ghana</option><option>China → Nigeria</option><option>China → USA</option><option>China → Canada</option><option>Multi-market</option><option>Other / Not sure</option></select></div>
-          <div class="fg"><label class="fl">Product Category</label><select class="fs"><option value="" disabled selected>Select a category</option><option>Home &amp; Living</option><option>Apparel &amp; Textiles</option><option>Electronics</option><option>Health &amp; Beauty</option><option>Toys &amp; Gifts</option><option>Hardware &amp; Tools</option><option>Multiple / Other</option></select></div>
-          <div class="fg"><label class="fl">Message</label><textarea class="ft" placeholder="Tell us about your trade needs — volumes, timelines, and any specific requirements..."></textarea></div>
-          <button class="fsub">Send Trade Inquiry →</button>
-        </div>
+        <form action="https://formspree.io/f/mojplbng" method="POST" class="form">
+
+  <!-- Redirect after successful submission -->
+  <input type="hidden" name="_redirect" value="https://www.clanheirs.com/thank-you.html" />
+
+  <div class="frow">
+    <div class="fg">
+      <label class="fl">Full Name</label>
+      <input type="text" class="fi" name="full_name" placeholder="Your name" required />
+    </div>
+
+    <div class="fg">
+      <label class="fl">Company</label>
+      <input type="text" class="fi" name="company" placeholder="Company name" />
+    </div>
+  </div>
+
+  <div class="fg">
+    <label class="fl">Email Address</label>
+    <input type="email" class="fi" name="email" placeholder="you@company.com" required />
+  </div>
+
+  <div class="fg">
+    <label class="fl">Market Interest</label>
+    <select class="fs" name="market_interest" required>
+      <option value="" disabled selected>Select a market</option>
+      <option>China → Ghana</option>
+      <option>China → Nigeria</option>
+      <option>China → USA</option>
+      <option>China → Canada</option>
+      <option>Multi-market</option>
+      <option>Other / Not sure</option>
+    </select>
+  </div>
+
+  <div class="fg">
+    <label class="fl">Product Category</label>
+    <select class="fs" name="product_category" required>
+      <option value="" disabled selected>Select a category</option>
+      <option>Home &amp; Living</option>
+      <option>Apparel &amp; Textiles</option>
+      <option>Electronics</option>
+      <option>Health &amp; Beauty</option>
+      <option>Toys &amp; Gifts</option>
+      <option>Hardware &amp; Tools</option>
+      <option>Multiple / Other</option>
+    </select>
+  </div>
+
+  <div class="fg">
+    <label class="fl">Message</label>
+    <textarea class="ft" name="message" placeholder="Tell us about your trade needs — volumes, timelines, and any specific requirements..." required></textarea>
+  </div>
+
+  <button type="submit" class="fsub">
       </div>
     </div>
   </div>
